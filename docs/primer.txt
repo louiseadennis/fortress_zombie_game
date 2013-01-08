@@ -3,3 +3,21 @@ Creating the SQL Database:
 
 Want to create your own suburb?
   You can use building_generator.pl to generate buildings in roughly the same proportions as they appear in the original Urban Dead.
+
+
+create user 'urbandead'@'localhost' IDENTIFIED BY 'purplecat';
+GRANT SELECT on squares TO 'urbandead'@'localhost';
+
+sudo apachectl start;
+
+(If necessary uncomment php5_module in /private/etc/apache2/httpd.conf and 
+
+cd /private/etc
+sudo cp php.ini.default php.ini
+
+/etc/apache2/users/louiseadennis.conf  Change permissions on first two lines to all
+
+Set up websharing.
+)
+
+errors found in /var/log/apache2/error_log
