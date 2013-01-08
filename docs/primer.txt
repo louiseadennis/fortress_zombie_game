@@ -1,0 +1,5 @@
+Creating the SQL Database:
+  Use initial_db.dat in utils
+
+Want to create your own suburb?
+  You can use building_generator.pl to generate buildings in roughly the same proportions as they appear in the original Urban Dead.
