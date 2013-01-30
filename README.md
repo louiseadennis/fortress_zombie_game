@@ -1,4 +1,4 @@
-urban_dead_2
-============
+Fortress Zombie Game
+====================
 
-A Reimplementation of the Urban Dead browser game.
+A Zombie Game inspired by Kevan Davis' Urban Dead.  Created by The Fortress.
