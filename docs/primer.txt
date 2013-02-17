@@ -1,13 +1,21 @@
 Creating the SQL Database:
-  Use initial_db.dat in utils
+==========================
 
-Want to create your own suburb?
-  You can use building_generator.pl to generate buildings in roughly the same proportions as they appear in the original Urban Dead.
-
+Use initial_db.dat in utils
 
 create user 'urbandead'@'localhost' IDENTIFIED BY 'purplecat';
 GRANT SELECT on squares TO 'urbandead'@'localhost';
 
+Edit relevant user names and passwords in /localfiles/config.inc.php
+
+Want to create your own suburb?
+===============================
+
+You can use building_generator.pl to generate buildings in roughly the same proportions as they appear in the original Urban Dead.
+
+
+Apache set up
+==============
 sudo apachectl start;
 
 (If necessary uncomment php5_module in /private/etc/apache2/httpd.conf and 
