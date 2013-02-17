@@ -1,8 +1,5 @@
-<?
+<?php
 
-$mysql_host = "localhost";
-$mysql_database = "ud2";
-$mysql_user = "urbandead";
-$mysql_password = "purplecat";
+require_once('/Users/louiseadennis/Personal/urbandead/fortress_zombie_game/localfiles/config.inc.php');
 
 ?>
