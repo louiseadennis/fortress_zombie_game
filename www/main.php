@@ -1,9 +1,12 @@
-<?php
+<?php 
 
-# Will need to put some authentication here
+require('./config/accesscontrol.php');
 
 # Connect to DB
 require_once('./config/MySQL.php');
+
+session_start();
+session_authenticate();
 
 $mysql = mysql_connect($mysql_host, $mysql_user, $mysql_password);
 mysql_select_db($mysql_database);
