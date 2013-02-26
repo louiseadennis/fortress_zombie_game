@@ -6,7 +6,7 @@ require('./config/accesscontrol.php');
 require_once('./config/MySQL.php');
 
 session_start();
-session_authenticate();
+sessionAuthenticate();
 
 $mysql = mysql_connect($mysql_host, $mysql_user, $mysql_password);
 mysql_select_db($mysql_database);

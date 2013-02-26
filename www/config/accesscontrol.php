@@ -12,7 +12,7 @@ function authenticateUser($connection, $username, $password)
  $password_digest = crypt(trim($password));
 
  //Formulate the SQL find the user
- $query = "SELECT password FROM users WHERE user_name = '{$username}' AND password = '{$password_digest}'";
+ $query = "SELECT password FROM users WHERE name = '{$username}' AND password = '{$password_digest}'";
 
  // Execute the query
  if (!$result = @mysql_query($query, $connection))
