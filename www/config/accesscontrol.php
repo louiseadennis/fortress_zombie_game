@@ -1,5 +1,5 @@
-# Shamelessly stolen from PHP and MySQL by Hugh E. Williams and David Lane
 <?php
+// Shamelessly stolen from PHP and MySQL by Hugh E. Williams and David Lane
 
 function authenticateUser($connection, $username, $password)
 {
@@ -7,22 +7,29 @@ function authenticateUser($connection, $username, $password)
  if (!isset($username) || !isset($password))
     return false;
 
- // Create a digest of the password  collected from the challenge
- // NB.  Need to add salt
- $password_digest = crypt(trim($password));
-
- //Formulate the SQL find the user
- $query = "SELECT password FROM users WHERE name = '{$username}' AND password = '{$password_digest}'";
+ //Formulate the SQL find the user and their password
+ $query = "SELECT password FROM users WHERE name = '{$username}'";
 
  // Execute the query
  if (!$result = @mysql_query($query, $connection))
-    showerror();
+     showerror();
 
  // Exactly oe row? then we have found the user
  if (mysql_num_rows($result) != 1)
   return false;
- else
-  return true;
+ else {
+    while($row = mysql_fetch_array($result)) {
+         $crypt_password = $row["password"];
+         // Create a digest of the password  collected from the challenge
+         // $crypt_password acts as the salt.
+        $password_digest = crypt($password, $crypt_password);
+        if ($password_digest == $crypt_password) {
+           return true;
+        } else {
+          return false;
+        }
+    }
+ }
 }
 
 // Connects to a session and checks that the user has authenticated 
@@ -34,8 +41,8 @@ function sessionAuthenticate()
  if (!isset($_SESSION["loginUsername"]))
  {
    // The resquest does not identify a session
-   $_SESSION["message"] = "You are not authorized to access";
-   header("Location: login.html");
+   $message = "You are not authorized to access";
+   header("Location: login_form.php?msg=$message");
    exit;
  }
 
@@ -46,8 +53,8 @@ function sessionAuthenticate()
    // The request did not originate from the machine
   // that was used to create the session.
   // THIS IS PROBABLY A SESSION HIJACK ATTEMPT
-  $_SESSION["message"] = "You are not authorized to acces the URL";
-  header("Location: login.html");
+  $message = "You are not authorized to acces the URL";
+  header("Location: login_form.php?msg=$message");
   exit;
   }
 }

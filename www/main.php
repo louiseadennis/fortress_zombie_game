@@ -43,11 +43,14 @@ while($row = mysql_fetch_array($res))
    print "<td class=b {$background}><form action='' method='post'><input type='hidden' name='cx' value='{$row["xcoord"]}'><input type='hidden' name='cy' value='{$row["ycoord"]}'><input type='submit' value='{$row["name"]}'></input></form></td>";
    $previousx=$row["xcoord"];
 }
-
-
 ?>
 </table>
 </div>
+
+<form method="POST" action="logout.php">
+<input type="submit" value="Log Out">
+</form>
+
 </body>
 </html>
 

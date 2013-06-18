@@ -27,11 +27,11 @@ if (authenticateUser($mysql, $loginUsername, $loginPassword))
   exit;
 } else {
   // The authentication failed
-  $_SESSION["message"] = 
+  $message = 
     "Could not connect to Fortress Zombie Game as '{$loginUsername}'";
 
   // Relocate back to login page
-  header("Location: login.html");
+  header("Location: login_form.php?msg=$message");
   exit;
 }
 ?>
