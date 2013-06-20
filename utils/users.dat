@@ -1,4 +1,4 @@
-use ud2;
+use dennisse_ud2;
 CREATE TABLE users (
  user_id int NOT NULL auto_increment PRIMARY KEY,
  name CHAR(50) NOT NULL,
