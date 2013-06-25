@@ -38,7 +38,6 @@ if ($uname=='' or $email=='' or $pwd == '' or $cpwd == '') {
 	    exit;
         }
     } else {
-      echo '<script type="text/javascript">alert("This user name is already taken");</script>';
       $message = "This user name is already taken";
       header("Location: signup_form.php?msg=$message");
       exit;

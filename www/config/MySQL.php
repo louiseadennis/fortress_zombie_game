@@ -19,4 +19,51 @@ function showerror()
   die("Error " . mysql_errno() . " : " . mysql_error());
 }
 
+function get_user_id()
+{
+  $uname = $_SESSION["loginUsername"];
+
+  $sql = "SELECT user_id FROM users WHERE uname = $uname;
+
+  if (!$result = mysql_query($sql)) 
+      showerror();
+  
+  if (mysql_num_rows($result) != 1)
+      return 0;
+  else {
+     while ($row=mysql_fetch_array($result)) {
+   	 return $row["user_id"];
+   }
+}
+
+function get_character_name()
+{
+  $c_id = $_SESSION["c_id"];
+
+  $sql = "SELECT name FROM characters WHERE c_id = $c_id;
+
+  if (!$result = mysql_query($sql)) 
+      showerror();
+  
+  if (mysql_num_rows($result) != 1)
+      return 0;
+  else {
+     while ($row=mysql_fetch_array($result)) {
+   	 return $row["name"];
+   }
+}
+
+function characterSelected() 
+{
+ // Check if the user hasn't logged in
+ if (!isset($_SESSION["c_id"]))
+ {
+   // The resquest does not identify a session
+   $message = "No Character Selected";
+   header("Location: character_select_form.php?msg=$message");
+   exit;
+ }
+}
+
+}
 ?>

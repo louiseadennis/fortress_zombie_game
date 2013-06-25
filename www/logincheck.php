@@ -1,4 +1,3 @@
-// Shamelessly stolen from PHP and MySQL by Hugh E. Williams and David Lane
 <?php
 require ('./config/accesscontrol.php');
 require ('./config/MySQL.php');
@@ -23,7 +22,7 @@ if (authenticateUser($mysql, $loginUsername, $loginPassword))
   $_SESSION["loginIP"] = $_SERVER["REMOTE_ADDR"];
 
   // Relocate back to the first page
-  header("Location: main.php");
+  header("Location: character_select_form.php");
   exit;
 } else {
   // The authentication failed
