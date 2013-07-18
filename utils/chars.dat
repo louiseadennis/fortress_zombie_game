@@ -1,5 +1,5 @@
 use dennisse_ud2;
-CREATE TABLE users (
+CREATE TABLE characters (
  c_id int NOT NULL auto_increment PRIMARY KEY,
  name CHAR(100) NOT NULL,
  user_id int NOT NULL

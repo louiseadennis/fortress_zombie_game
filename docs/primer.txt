@@ -1,10 +1,16 @@
 Creating the SQL Database:
 ==========================
 
-Use initial_db.dat in utils
+Set up for the database tables can be found in utils
+
+Use squares.dat for the map
+users.dat for the user table
+chars.dat for the character table
 
 create user 'urbandead'@'localhost' IDENTIFIED BY 'purplecat';
 GRANT SELECT on squares TO 'urbandead'@'localhost';
+GRANT SELECT on users TO 'urbandead'@'localhost';
+GRANT SELECT on chars TO 'urbandead'@'localhost';
 
 Edit relevant user names and passwords in /localfiles/config.inc.php
 

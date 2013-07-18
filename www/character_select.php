@@ -3,7 +3,7 @@
 
 require_once('./config/accesscontrol.php');
 require_once('./config/MySQL.php');
-
+session_start();
 sessionAuthenticate();
 
 $c_id = $_POST['c_id'];

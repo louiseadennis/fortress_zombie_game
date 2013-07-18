@@ -1,8 +1,7 @@
 <?php // character_gen.php
 # Connect to DB
 
-require('./config/accesscontrol.php');
-
+require_once('./config/accesscontrol.php');
 require_once('./config/MySQL.php');
 
 sessionAuthenticate();
@@ -12,7 +11,7 @@ $mysql = mysql_connect($mysql_host, $mysql_user, $mysql_password);
 if (!mysql_select_db($mysql_database))
   showerror();
 
-$user_id = get_user_id();
+$user_id = get_user_id($mysql);
 $cname = mysqlclean($_POST, "charName", 100, $mysql);
 
 if ($cname=='') {

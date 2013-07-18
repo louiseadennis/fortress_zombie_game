@@ -1,3 +1,11 @@
+<?php
+
+require_once('./config/accesscontrol.php');
+require_once('./config/MySQL.php');
+session_start();
+sessionAuthenticate();
+?>
+
 <html>
 <head>
 <title>Create a Character</title>
@@ -5,7 +13,7 @@
 </head>
 <body>
 <h1>Create a Character</h1>
-<form method="POST" action="signup.php">
+<form method="POST" action="character_gen.php">
 <?php
   if (isset($_GET['msg'])) {
      $msg = $_GET['msg'];

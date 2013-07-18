@@ -4,7 +4,7 @@ require_once('./config/accesscontrol.php');
 
 # Connect to DB
 require_once('./config/MySQL.php');
-
+session_start();
 sessionAuthenticate();
 characterSelected();
 
@@ -20,6 +20,7 @@ if ($cx == NULL) {
 }
 $currentlocation='bgcolor="#C0C0C0"';
 $otherlocarion='bgcolor="#F5F5F5"';
+
 ?>
 <html>
 <head>
@@ -49,18 +50,18 @@ while($row = mysql_fetch_array($res))
 
 <p>You are
 <?php
-  $cname = get_character_name();
+  $cname = get_character_name($mysql);
   print $cname;
 ?>.
 </div>
 
 
 <form method="POST" action="character_select.php">
-<select>
+Switch to character: <select name=c_id>
 <?php
-$uid = get_user_id();
-$sql = "SELECT (c_id, name) from characters WHERE uid = $uid";
-if (!$result = @mysql_query($sql))
+$uid = get_user_id($mysql);
+$sql = "SELECT c_id, name from characters WHERE user_id = $uid";
+if (!$result = @mysql_query($sql,$mysql))
      showerror();
 while ($row = mysql_fetch_array($result)) {
      print ("<option value=");
@@ -71,7 +72,9 @@ while ($row = mysql_fetch_array($result)) {
 }
 ?>
 </select>
+<input type="submit" value="Select New Character">
 </form>
+Or <a href=character_gen_form.php>Create a new Character</a>.
 
 <form method="POST" action="logout.php">
 <input type="submit" value="Log Out">

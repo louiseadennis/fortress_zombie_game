@@ -4,6 +4,9 @@ require_once('./config/accesscontrol.php');
 require_once('./config/MySQL.php');
 session_start();
 sessionAuthenticate();
+$mysql = mysql_connect($mysql_host, $mysql_user, $mysql_password);
+if (!mysql_select_db($mysql_database))
+  showerror();
 ?>
 
 <html>
@@ -20,11 +23,11 @@ sessionAuthenticate();
      echo '<p>' . $msg . '</p>';
   } 
 ?>
-<select>
+<select name="c_id">
 <?php
-$uid = get_user_id();
-$sql = "SELECT (c_id, name) from characters WHERE uid = $uid";
-if (!$result = @mysql_query($sql)) {
+$uid = get_user_id($mysql);
+$sql = "SELECT c_id, name from characters WHERE user_id = $uid";
+if (!$result = @mysql_query($sql,$mysql)) {
     header("Location: character_gen_form.php");
     exit;
 }
