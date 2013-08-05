@@ -2,6 +2,8 @@ use dennisse_ud2;
 CREATE TABLE characters (
  c_id int NOT NULL auto_increment PRIMARY KEY,
  name CHAR(100) NOT NULL,
+ square_id int(4) NOT NULL,
+ inside tinyint(1) default 0,
  user_id int NOT NULL
  ) ENGINE=InnoDB;
 

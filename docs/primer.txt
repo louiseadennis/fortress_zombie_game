@@ -7,12 +7,14 @@ Use squares.dat for the map
 users.dat for the user table
 chars.dat for the character table
 
-create user 'urbandead'@'localhost' IDENTIFIED BY 'purplecat';
-GRANT SELECT on squares TO 'urbandead'@'localhost';
-GRANT SELECT on users TO 'urbandead'@'localhost';
-GRANT SELECT on chars TO 'urbandead'@'localhost';
+Create DB user and permissions -- e.g
 
-Edit relevant user names and passwords in /localfiles/config.inc.php
+create user 'urbandead'@'localhost' IDENTIFIED BY 'purplecat';
+GRANT SELECT, INSERT, UPDATE on ud2.* to 'urbandead'@'localhost';
+
+Edit relevant user names and passwords in /localfiles/config.inc.php.sample and copy to config.inc.php
+
+You may also want to edit paths in www/config/MySQL.php
 
 Want to create your own suburb?
 ===============================
