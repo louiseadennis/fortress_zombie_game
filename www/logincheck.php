@@ -1,6 +1,7 @@
 <?php
 require ('./config/accesscontrol.php');
 require ('./config/MySQL.php');
+require ('utilities.php');
 
 $mysql = mysql_connect($mysql_host, $mysql_user, $mysql_password);
 if (!mysql_select_db($mysql_database))
