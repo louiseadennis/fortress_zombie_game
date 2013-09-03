@@ -112,4 +112,63 @@ function squareFromCoords($cx, $cy, $inside, $connection)
 
 }
 
+function check_legal($c_id, $cx, $cy, $inside, $mysql)
+{
+  $charsquare = squareFromChar($c_id, $mysql);
+
+  $charx = $charsquare['xcoord'];
+  $chary = $charsquare['ycoord'];
+  $char_inside = $charsquare['inside'];
+ 
+  if (abs($charx - $cx) < 2) {
+     if (abs($chary - $cy) < 2) {
+        // This is a legal square
+ 
+        if ($charx != $cx || $chary != $cy) {
+            // must go outside if leaving this square
+            if ($inside == 0) {
+               return TRUE;
+            } else {
+               return FALSE;
+            }
+        }
+
+        return TRUE;
+     }
+  }
+
+  return FALSE;
+}
+
+function deduct_ap($c_id, $connection)
+{
+  $sql = "select ap, last_action_time, accrued_time from characters where c_id  = $c_id";
+
+  $ap_res = mysql_query($sql, $connection);
+  while ($row = mysql_fetch_array($ap_res)) {
+    $ap = $row["ap"];
+    $last_time = $row["last_action_time"];
+    $accrued_time = $row["accrued_time"];
+  }
+
+  $current_time = time();
+  // convert mysql timestamp to a php timestamp;
+  $last_timestamp = date('H:i:s',strtotime($last_time));
+
+  $time_passed = ($current_time - $last_timestamp) + $accrued_time;
+  $ap_gained = $time_passed/1800;
+  if ($ap_gained >= 1) {
+     if ($ap + $ap_gained - 1 > 50) {
+        $new_ap = 50;
+        $new_acc_time = 0;
+     } else {
+        $new_ap = $ap + $ap_gained - 1;
+        $new_acc_time = $time_passed % 1800;
+     }
+  } else {
+     $new_ap = $ap - 1;
+     $new_acc_time = $time_passed;
+  }
+}
+
 ?>

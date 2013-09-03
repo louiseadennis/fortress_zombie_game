@@ -24,22 +24,24 @@ $cx = $_POST["cx"];
 $cy = $_POST["cy"];
 $inside = $_POST["inside"];
 
-# Get Location details from database if there isn't a form
-if ($cx == NULL) {
+// Get Location details from database.
+if ($cx != NULL & check_legal($c_id, $cx, $cy, $inside, $mysql)) {
+    // Character has taken an action
+    deduct_ap($c_id, $mysql);
+    $current_square = squareFromCoords($cx, $cy, $inside, $mysql);
+    $square = $current_square['square_id'];
+
+    // update the character database because the character has moved
+    $char_update = "UPDATE characters SET square_id=$square, inside=$inside WHERE c_id = $c_id";
+
+    if (!mysql_query($char_update)) {
+        $message = "Database Error: " . mysql_errno() . " : " . mysql_error();
+       	header("Location: main.php?msg=$message");
+       	exit;
+    } 
+} else {
    $current_square = squareFromChar($c_id, $mysql);
    $square = $current_square['square_id'];
-} else {
-   $current_square = squareFromCoords($cx, $cy, $inside, $mysql);
-   $square = $current_square['square_id'];
-
-   // update the character database because the character has moved
-   $char_update = "UPDATE characters SET square_id=$square, inside=$inside WHERE c_id = $c_id";
-
-   if (!mysql_query($char_update)) {
-       $message = "Database Error: " . mysql_errno() . " : " . mysql_error();
-       header("Location: main.php?msg=$message");
-       exit;
-    } 
 }
 
 // Set up variable describing the current square

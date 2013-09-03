@@ -4,6 +4,9 @@ CREATE TABLE characters (
  name CHAR(100) NOT NULL,
  square_id int(4) NOT NULL,
  inside tinyint(1) default 0,
- user_id int NOT NULL
+ user_id int NOT NULL,
+ ap int(2) default 50,
+ last_action_time TIMESTAMP,
+ accrued_time int(5) default 0
  ) ENGINE=InnoDB;
 
