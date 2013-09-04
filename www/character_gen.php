@@ -3,6 +3,7 @@
 
 require_once('./config/accesscontrol.php');
 require_once('./config/MySQL.php');
+require_once('utilities.php');
 session_start();
 sessionAuthenticate();
 $max_char = 3;
