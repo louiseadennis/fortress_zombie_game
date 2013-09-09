@@ -1,4 +1,5 @@
 <?php
+require_once('globals.php');
 
 // Stolen from PHP and MySQL by Hugh E. Williams and David Lane
 function showerror() 
@@ -39,6 +40,26 @@ function get_character_name($c_id, $connection)
      while ($row=mysql_fetch_array($result)) {
          $name = $row["name"];
    	 return $name;
+    }
+  }
+}
+
+
+function get_character_details($c_id, $connection)
+{
+  $sql = "SELECT (name, ap) FROM characters WHERE c_id = $c_id";
+
+  if (!$result = mysql_query($sql,$connection)) 
+      showerror();
+  
+  if (mysql_num_rows($result) != 1)
+      return 0;
+  else {
+     while ($row=mysql_fetch_array($result)) {
+         $character=array();
+         $character['name'] = $row["name"];
+         $character['ap'] = $row["ap"];
+   	 return $character;
     }
   }
 }
@@ -142,6 +163,9 @@ function check_legal($c_id, $cx, $cy, $inside, $mysql)
 
 function deduct_ap($c_id, $connection)
 {
+  $max_ap = get_max_ap($connection);
+  $ap_refresh_rate = get_ap_refresh_rate($connection);
+
   $sql = "select ap, last_action_time, accrued_time from characters where c_id  = $c_id";
 
   $ap_res = mysql_query($sql, $connection);
@@ -156,14 +180,14 @@ function deduct_ap($c_id, $connection)
   $last_timestamp = date('H:i:s',strtotime($last_time));
 
   $time_passed = ($current_time - $last_timestamp) + $accrued_time;
-  $ap_gained = $time_passed/1800;
+  $ap_gained = $time_passed/$ap_refresh_rate;
   if ($ap_gained >= 1) {
-     if ($ap + $ap_gained - 1 > 50) {
-        $new_ap = 50;
+     if ($ap + $ap_gained - 1 > $max_ap) {
+        $new_ap = $max_ap;
         $new_acc_time = 0;
      } else {
         $new_ap = $ap + $ap_gained - 1;
-        $new_acc_time = $time_passed % 1800;
+        $new_acc_time = $time_passed % $ap_refresh_rate;
      }
   } else {
      $new_ap = $ap - 1;

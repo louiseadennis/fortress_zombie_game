@@ -3,9 +3,9 @@
 
 require_once('./config/accesscontrol.php');
 require_once('./config/MySQL.php');
+require_once('globals.php');
 session_start();
 sessionAuthenticate();
-$max_char = 3;
 
 $mysql = mysql_connect($mysql_host, $mysql_user, $mysql_password);
 if (!mysql_select_db($mysql_database))
@@ -13,6 +13,7 @@ if (!mysql_select_db($mysql_database))
 
 $user_id = get_user_id($mysql);
 $cname = mysqlclean($_POST, "charName", 100, $mysql);
+$max_char = get_max_chars($mysql_database);
 
 if ($cname=='') {
     $message = "One or more required fields were left blank";

@@ -172,9 +172,11 @@ function printMiniMapCharList($sq_id, $inside, $c_id, $connection)
 
 function printCharacterDetails($c_id, $connection)
 {
-  $name = get_character_name($c_id, $connection);
+  $character = get_character_details($c_id, $connection);
+  $name = $character['name'];
+  $ap = $character['ap'];
 
-  print "<div class=char><p>You are $name.<p></div>";
+  print "<div class=char><p>You are $name.  You have $ap action points.</p></div>";
 }
 
 function printLocationDetails($current_square, $c_id, $connection) 

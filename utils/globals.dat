@@ -1,0 +1,11 @@
+use dennisse_ud2;
+CREATE TABLE globals (
+ global_id int NOT NULL auto_increment PRIMARY KEY,
+ name CHAR(50) NOT NULL,
+ value INT NOT NULL,
+ ) ENGINE=InnoDB;
+
+INSERT INTO globals (name, value) VALUES ("max_chars", 3);
+INSERT INTO globals (name, value) VALUES ("max_ap", 50);
+INSERT INTO globals (name, value) VALUES ("ap_refresh_rate", 1800);
+
