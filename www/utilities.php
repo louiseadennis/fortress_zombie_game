@@ -47,7 +47,7 @@ function get_character_name($c_id, $connection)
 
 function get_character_details($c_id, $connection)
 {
-  $sql = "SELECT (name, ap) FROM characters WHERE c_id = $c_id";
+  $sql = "SELECT name, ap FROM characters WHERE c_id = $c_id";
 
   if (!$result = mysql_query($sql,$connection)) 
       showerror();
@@ -165,22 +165,27 @@ function deduct_ap($c_id, $connection)
 {
   $max_ap = get_max_ap($connection);
   $ap_refresh_rate = get_ap_refresh_rate($connection);
-
+  date_default_timezone_set('Europe/London');
+  
   $sql = "select ap, last_action_time, accrued_time from characters where c_id  = $c_id";
 
   $ap_res = mysql_query($sql, $connection);
   while ($row = mysql_fetch_array($ap_res)) {
     $ap = $row["ap"];
+    if ($ap == 0) {
+     return false;
+    }
     $last_time = $row["last_action_time"];
     $accrued_time = $row["accrued_time"];
   }
 
   $current_time = time();
   // convert mysql timestamp to a php timestamp;
-  $last_timestamp = date('H:i:s',strtotime($last_time));
-
+  $last_timestamp = strtotime($last_time);
+  
   $time_passed = ($current_time - $last_timestamp) + $accrued_time;
   $ap_gained = $time_passed/$ap_refresh_rate;
+
   if ($ap_gained >= 1) {
      if ($ap + $ap_gained - 1 > $max_ap) {
         $new_ap = $max_ap;
@@ -193,6 +198,14 @@ function deduct_ap($c_id, $connection)
      $new_ap = $ap - 1;
      $new_acc_time = $time_passed;
   }
+
+  $sql2 = "UPDATE characters SET ap=$new_ap, accrued_time=$new_acc_time WHERE c_id = $c_id";
+  if (!mysql_query($sql2, $connection)) {
+        $message = "Database Error: " . mysql_errno() . " : " . mysql_error();
+       	header("Location: main.php?msg=$message");
+       	exit;
+  }
+  return true;
 }
 
 ?>

@@ -20,14 +20,16 @@ mysql_select_db($mysql_database);
 
 // Get session and post variables
 $c_id = $_SESSION["c_id"];
-$cx = $_POST["cx"];
-$cy = $_POST["cy"];
-$inside = $_POST["inside"];
+if ( isset($_POST["cx"]) ) {
+   $cx = $_POST["cx"];
+   $cy = $_POST["cy"];
+   $inside = $_POST["inside"];
+}
 
 // Get Location details from database.
-if ($cx != NULL & check_legal($c_id, $cx, $cy, $inside, $mysql)) {
+if ($cx != NULL & check_legal($c_id, $cx, $cy, $inside, $mysql) & deduct_ap($c_id, $mysql)) {
     // Character has taken an action
-    deduct_ap($c_id, $mysql);
+
     $current_square = squareFromCoords($cx, $cy, $inside, $mysql);
     $square = $current_square['square_id'];
 
@@ -51,6 +53,8 @@ $inside = $current_square['inside'];
 $square_type = $current_square['type'];
 $square_name = $current_square['name'];
 
+$character = get_character_details($c_id, $mysql);
+$ap = $character['ap'];
 ?>
 
 <html>
@@ -69,11 +73,15 @@ if (isset($_GET['msg'])) {
     echo '<p>' . $msg . '</p>';
 } 
 
-printMiniMap($current_square, $c_id, $mysql);
+if ($ap > 0) {
+    printMiniMap($current_square, $c_id, $mysql);
 
-printCharacterDetails($c_id, $mysql);
+    printCharacterDetails($character, $mysql);
 
-printLocationDetails($current_square, $cid, $mysql);
+    printLocationDetails($current_square, $cid, $mysql);
+} else {
+    print "<div class=warning><p>You have $ap action points.  You are exhausted and can go no further</p></div>";
+}
 ?>
 </div>
 
@@ -170,9 +178,8 @@ function printMiniMapCharList($sq_id, $inside, $c_id, $connection)
     }
 }
 
-function printCharacterDetails($c_id, $connection)
+function printCharacterDetails($character, $connection)
 {
-  $character = get_character_details($c_id, $connection);
   $name = $character['name'];
   $ap = $character['ap'];
 

@@ -14,7 +14,7 @@ if (!mysql_select_db($mysql_database))
 
 $user_id = get_user_id($mysql);
 $cname = mysqlclean($_POST, "charName", 100, $mysql);
-$max_char = get_max_chars($mysql_database);
+$max_char = get_max_chars($mysql);
 
 if ($cname=='') {
     $message = "One or more required fields were left blank";
@@ -27,7 +27,7 @@ if ($cname=='') {
     if (!$result) {	
         $sql1 = "SELECT * FROM characters WHERE user_id = $user_id";
     	$result = mysql_query($sql1);
-        if (!$result || mysql_num_rows($result) <= $max_char) {
+        if (!$result || mysql_num_rows($result) < $max_char) {
 
  	    $sql2 = "INSERT INTO characters (name, user_id) VALUES ('$cname', $user_id)";
 	    if (!mysql_query($sql2)) {
@@ -40,7 +40,7 @@ if ($cname=='') {
             }
         } else {
           $message = "Sorry you have exceeded the Maximum Number of Character";
-          header("Location: character_gen_form.php?msg=$message");
+          header("Location: character_select_form.php?msg=$message");
           exit;
         }
     } else {
