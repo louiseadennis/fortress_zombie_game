@@ -166,6 +166,7 @@ function deduct_ap($c_id, $connection)
   $max_ap = get_max_ap($connection);
   $ap_refresh_rate = get_ap_refresh_rate($connection);
   date_default_timezone_set('Europe/London');
+  $return = true;
   
   $sql = "select ap, last_action_time, accrued_time from characters where c_id  = $c_id";
 
@@ -173,7 +174,7 @@ function deduct_ap($c_id, $connection)
   while ($row = mysql_fetch_array($ap_res)) {
     $ap = $row["ap"];
     if ($ap == 0) {
-     return false;
+     $return = false;
     }
     $last_time = $row["last_action_time"];
     $accrued_time = $row["accrued_time"];
@@ -205,7 +206,7 @@ function deduct_ap($c_id, $connection)
        	header("Location: main.php?msg=$message");
        	exit;
   }
-  return true;
+  return $return;
 }
 
 ?>
