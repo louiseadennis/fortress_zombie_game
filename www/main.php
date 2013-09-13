@@ -27,8 +27,7 @@ if ( isset($_POST["cx"]) ) {
 }
 
 // Get Location details from database.
-$time_passed = deduct_ap($c_id, $mysql);
-if ($cx != NULL & check_legal($c_id, $cx, $cy, $inside, $mysql) ) 
+if ($cx != NULL & check_legal($c_id, $cx, $cy, $inside, $mysql) & deduct_ap($c_id, $mysql)) 
 {
     // Character has taken an action
 
@@ -82,7 +81,7 @@ if ($ap > 0) {
 
     printLocationDetails($current_square, $c_id, $mysql);
 } else {
-    print "<div class=warning><p>You have $ap action points.  You are exhausted and can go no further ... $time_passed</p></div>";
+    print "<div class=warning><p>You have $ap action points.  You are exhausted and can go no further.</p></div>";
 }
 ?>
 </div>
