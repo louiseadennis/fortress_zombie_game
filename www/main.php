@@ -78,7 +78,7 @@ if ($ap > 0) {
 
     printCharacterDetails($character, $mysql);
 
-    printLocationDetails($current_square, $cid, $mysql);
+    printLocationDetails($current_square, $c_id, $mysql);
 } else {
     print "<div class=warning><p>You have $ap action points.  You are exhausted and can go no further</p></div>";
 }
@@ -209,7 +209,7 @@ function printLocationDetails($current_square, $c_id, $connection)
     print " $square_name [$cx, $cy].</p>";
 
     //  List other characters
-    $other_chars = otherCharactersAt($square, $inside, $c_id, $mysql);
+    $other_chars = otherCharactersAt($square, $inside, $c_id, $connection);
 
     $num_chars = count($other_chars);
     if ($num_chars > 0) {
@@ -226,6 +226,8 @@ function printLocationDetails($current_square, $c_id, $connection)
             }
         }
       print "</p>";
+    } else {
+      print "<p>No other characters here.</p>";
     }
 
     // Enter/Exit Building button
