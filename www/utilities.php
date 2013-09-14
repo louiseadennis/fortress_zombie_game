@@ -187,7 +187,7 @@ function deduct_ap($c_id, $connection)
   $time_passed = ($current_time - $last_timestamp) + $accrued_time;
   $ap_gained = $time_passed/$ap_refresh_rate;
 
-  if ($ap_gained >= 1) {
+  if ($ap_gained >= 1 && $ap < 50) {
      if ($ap + $ap_gained - 1 > $max_ap) {
         $new_ap = $max_ap;
         $new_acc_time = 0;
@@ -200,7 +200,7 @@ function deduct_ap($c_id, $connection)
      $new_acc_time = $time_passed;
   }
 
-  $sql2 = "UPDATE characters SET ap=$new_ap, accrued_time=$new_acc_time WHERE c_id = $c_id";
+  $sql2 = "UPDATE characters SET ap=$new_ap, accrued_time=$new_acc_time, last_action_time=$current_time WHERE c_id = $c_id";
   if (!mysql_query($sql2, $connection)) {
         $message = "Database Error: " . mysql_errno() . " : " . mysql_error();
        	header("Location: main.php?msg=$message");
