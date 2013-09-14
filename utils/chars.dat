@@ -6,7 +6,7 @@ CREATE TABLE characters (
  inside tinyint(1) default 0,
  user_id int NOT NULL,
  ap int(2) default 50,
- last_action_time TIMESTAMP,
+ last_action_time DATETIME,
  accrued_time int(5) default 0
  ) ENGINE=InnoDB;
 
