@@ -200,7 +200,8 @@ function deduct_ap($c_id, $connection)
      $new_acc_time = $time_passed;
   }
 
-  $sql2 = "UPDATE characters SET ap=$new_ap, accrued_time=$new_acc_time, last_action_time=$current_time WHERE c_id = $c_id";
+  $current_time_mysql = date("Y-m-d H:i:s", $current_time);
+  $sql2 = "UPDATE characters SET ap=$new_ap, accrued_time=$new_acc_time, last_action_time='$current_time_mysql' WHERE c_id = $c_id";
   if (!mysql_query($sql2, $connection)) {
         $message = "Database Error: " . mysql_errno() . " : " . mysql_error();
        	header("Location: main.php?msg=$message");
