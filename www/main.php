@@ -26,10 +26,14 @@ if ( isset($_POST["cx"]) ) {
    $inside = $_POST["inside"];
 }
 
+$character = get_character_details($c_id, $mysql);
+$ap = $character['ap'];
+
 // Get Location details from database.
-if ($cx != NULL & check_legal($c_id, $cx, $cy, $inside, $mysql) & deduct_ap($c_id, $mysql)) 
+if ($cx != NULL & check_legal($c_id, $cx, $cy, $inside, $mysql) & $ap > 0) 
 {
     // Character has taken an action
+    deduct_ap($c_id, $mysql);
 
     $current_square = squareFromCoords($cx, $cy, $inside, $mysql);
     $square = $current_square['square_id'];
@@ -54,8 +58,6 @@ $inside = $current_square['inside'];
 $square_type = $current_square['type'];
 $square_name = $current_square['name'];
 
-$character = get_character_details($c_id, $mysql);
-$ap = $character['ap'];
 ?>
 
 <html>
