@@ -161,21 +161,17 @@ function check_legal($c_id, $cx, $cy, $inside, $mysql)
   return FALSE;
 }
 
-function deduct_ap($c_id, $connection)
+function update_ap_no_action($c_id, $connection)
 {
   $max_ap = get_max_ap($connection);
   $ap_refresh_rate = get_ap_refresh_rate($connection);
   date_default_timezone_set('Europe/London');
-  $return = true;
   
   $sql = "select ap, last_action_time, accrued_time from characters where c_id  = $c_id";
 
   $ap_res = mysql_query($sql, $connection);
   while ($row = mysql_fetch_array($ap_res)) {
     $ap = $row["ap"];
-    if ($ap == 0) {
-     $return = false;
-    }
     $last_time = $row["last_action_time"];
     $accrued_time = $row["accrued_time"];
   }
@@ -187,9 +183,56 @@ function deduct_ap($c_id, $connection)
   $time_passed = ($current_time - $last_timestamp) + $accrued_time;
   $ap_gained = $time_passed/$ap_refresh_rate;
 
-  if ($ap_gained >= 1 && $ap < 50) {
-     if ($ap + $ap_gained - 1 > $max_ap) {
+  if ($ap_gained >= 1 && $ap < $max_ap) {
+     if ($ap + $ap_gained > $max_ap) {
         $new_ap = $max_ap;
+        $new_acc_time = 0;
+     } else {
+        $new_ap = $ap + $ap_gained;
+        $new_acc_time = $time_passed % $ap_refresh_rate;
+     }
+  } else if ($ap >= $max_ap) {
+     $new_ap = $max_ap;
+     $new_acc_time = 0;
+  } else {
+     $new_ap = $ap;
+     $new_acc_time = $time_passed;
+  }
+
+  $current_time_mysql = date("Y-m-d H:i:s", $current_time);
+  $sql2 = "UPDATE characters SET ap=$new_ap, accrued_time=$new_acc_time, last_action_time='$current_time_mysql' WHERE c_id = $c_id";
+  if (!mysql_query($sql2, $connection)) {
+        $message = "Database Error: " . mysql_errno() . " : " . mysql_error();
+       	header("Location: main.php?msg=$message");
+       	exit;
+  }
+}
+
+function update_ap_with_action($c_id, $connection)
+{
+  $max_ap = get_max_ap($connection);
+  $ap_refresh_rate = get_ap_refresh_rate($connection);
+  date_default_timezone_set('Europe/London');
+  
+  $sql = "select ap, last_action_time, accrued_time from characters where c_id  = $c_id";
+
+  $ap_res = mysql_query($sql, $connection);
+  while ($row = mysql_fetch_array($ap_res)) {
+    $ap = $row["ap"];
+    $last_time = $row["last_action_time"];
+    $accrued_time = $row["accrued_time"];
+  }
+
+  $current_time = time();
+  // convert mysql timestamp to a php timestamp;
+  $last_timestamp = strtotime($last_time);
+  
+  $time_passed = ($current_time - $last_timestamp) + $accrued_time;
+  $ap_gained = $time_passed/$ap_refresh_rate;
+
+  if ($ap_gained >= 1 && $ap < $max_ap) {
+     if ($ap + $ap_gained - 1 >= $max_ap) {
+        $new_ap = $max_ap - 1;
         $new_acc_time = 0;
      } else {
         $new_ap = $ap + $ap_gained - 1;
@@ -207,7 +250,6 @@ function deduct_ap($c_id, $connection)
        	header("Location: main.php?msg=$message");
        	exit;
   }
-  return $return;
 }
 
 ?>

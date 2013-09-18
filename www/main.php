@@ -26,6 +26,7 @@ if ( isset($_POST["cx"]) ) {
    $inside = $_POST["inside"];
 }
 
+update_ap_no_action($c_id, $mysql);
 $character = get_character_details($c_id, $mysql);
 $ap = $character['ap'];
 
@@ -33,7 +34,13 @@ $ap = $character['ap'];
 if ($cx != NULL & check_legal($c_id, $cx, $cy, $inside, $mysql) & $ap > 0) 
 {
     // Character has taken an action
-    deduct_ap($c_id, $mysql);
+
+    // Deduct 1 from ap.  This probably needs to be rationalised but waith
+    // until we have actions refactored.
+    update_ap_with_action($c_id, $mysql);
+    $new_ap = $ap - 1;
+    $ap = $new_ap;
+    $character['ap'] = $ap;
 
     $current_square = squareFromCoords($cx, $cy, $inside, $mysql);
     $square = $current_square['square_id'];
